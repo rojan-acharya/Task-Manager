@@ -1,0 +1,92 @@
+Project: Task Manager (To-Do List)
+
+Description: A command-line task manager that allows users to manage their daily tasks. Users can add, update, delete, and mark tasks as completed. Additionally, they can set due dates, prioritize tasks, and filter tasks based on status (completed or pending).
+
+Features:
+
+User Authentication
+Users must register and log in to use the task manager. Each user has their own task list, and tasks are saved to the file under their unique username. This ensures that tasks are managed separately for each user.
+
+User Registration:
+Users can register with a unique username and password.
+Passwords are stored securely (hashed, not in plain text).
+User data is saved in a JSON or CSV file for persistent storage.
+
+User Login:
+Users must log in with their username and password to access the task manager.
+If the username or password is incorrect, the user is prompted to try again.
+Upon successful login, users can access their task list and manage tasks.
+
+Add a Task:
+Input task name, description, due date (optional), and priority (low, medium, high).
+Each task is associated with the logged-in user.
+
+View All Tasks:
+List all tasks with their details (name, due date, priority, and status).
+Display pending tasks and completed tasks in separate sections.
+
+Mark Task as Completed:
+Users can mark tasks as "completed."
+
+Delete or Update Tasks:
+Update or delete tasks from the task list.
+
+Filter Tasks:
+Filter by task status (pending, completed), priority, or due date.
+
+Task Sorting:
+Sort tasks based on priority or due date to easily track important tasks.
+
+Data Persistence:
+Save tasks in a local file (CSV or JSON) for each user so that tasks are not lost when the program is closed.
+
+Task Summary:
+Show the total number of tasks, how many are completed, and how many are pending.
+
+Authentication and Security:
+Secure Password Storage:
+Use password hashing (e.g., with Python's hashlib module) to store user passwords securely.
+
+Login Session:
+Once a user logs in, their session remains active until they choose to log out or exit the program.
+
+Logout:
+Users can log out to prevent others from accessing their tasks on shared systems.
+
+Error Handling in Authentication:
+Handle cases where a username already exists during registration.
+Ensure login fails gracefully with incorrect credentials.
+
+Tools and Concepts:
+Classes and Objects:
+Create User, Task and TaskManager Classes and different methods accordingly
+
+File Handling for User Data:
+Use JSON or CSV to store user data (username, hashed password, and tasks).
+Load user data at login to fetch their specific task list.
+
+Data Structures:
+Use dictionaries or lists to store user-specific task details.
+
+Error Handling:
+Handle invalid inputs for user registration, login, and task management (e.g., invalid date format, non-existent users).
+
+Date and Time Handling:
+Use Python’s datetime module to manage and compare due dates.
+
+User Interaction:
+Command-line interaction for task management and user authentication.
+
+Optional Features (For More Complexity):
+
+Password Reset:
+Allow users to reset their password if forgotten by answering security questions or providing email-based recovery.
+
+Two-Factor Authentication (2FA):
+For enhanced security, users can enable 2FA using email or phone verification.
+
+Multi-User Support:
+Add functionality for multiple users to log in and manage tasks simultaneously (for a multi-user task management system).
+
+Session Management:
+Implement session timeout, so users are automatically logged out after a certain period of inactivity.
