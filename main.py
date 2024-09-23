@@ -1,5 +1,6 @@
 from auth.user_auth import User
-from utils import get_username, get_password
+from task.manager import TaskManager
+from utils import get_username, get_password, get_task, get_description, get_due_date, get_priority
 
 
 MAIN_OPTIONS = ['login', 'register', 'exit']
@@ -19,7 +20,7 @@ def main():
 
     while True:
         if not logged_in:
-            print("\n------- Welcome to ABC's Todo App -------\n")
+            print(f"\n{'-'*7} Welcome to ABC's Todo App {'-'*7}\n")
             menu(MAIN_OPTIONS)
         else:
             menu(TASK_OPTIONS)
@@ -45,9 +46,42 @@ def main():
                 else:
                     print("\nOption out of range! Try Again :(")
             else:
-                if user_input == len(TASK_OPTIONS) - 1:
-                    logged_in = False
-                    print("\nLogout successfull :)")
+                if user_input >= 0 and user_input <= len(TASK_OPTIONS)-1:
+                    if user_input == len(TASK_OPTIONS) - 1:
+                        logged_in = False
+                        print("\nLogout successfull :)")
+                    
+                    elif user_input == 0:
+                        print('\nAdding task:')
+                        task_name = get_task()
+                        description = get_description()
+                        due_date = get_due_date()
+                        priority = get_priority()
+
+                        add = TaskManager(task_name, description, due_date, priority)
+                        add.add_task()
+
+                    elif user_input == 1:
+                        print('\nViewing task:')
+                        view = TaskManager('', '', '', '')
+                        view.view_task()
+
+                    elif user_input == 2:
+                        print('\nUpdating task:\n')
+                        update = TaskManager('', '', '', '')
+                        update.update_task()
+                    
+                    elif user_input == 3:
+                        print('\nMarking task:\n')
+                        mark = TaskManager('', '', '', '')
+                        mark.mark_complete()
+
+                    elif user_input == 5:
+                        print('\nRemoving task:\n')
+                        remove = TaskManager('', '', '', '')
+                        remove.remove_task()
+                else:
+                    print("\nOption out of range! Try Again :(\n")
                     
         except ValueError:
             print("\nPlease enter numeric option number :(")

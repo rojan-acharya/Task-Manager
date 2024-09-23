@@ -8,5 +8,10 @@
         "username": "manami",
         "password": "$2b$12$cyZ8VVl911QAb.fTJPkicOXcqnAlz69qK8cSljfhtFk9AWnj2CJ5u",
         "joined_date": "2024-09-20"
+    },
+    "mijas": {
+        "username": "mijas",
+        "password": "$2b$12$yXejtvgQpdsieU8ISinMKOP2qkAzLlRCpxbe2FZJ.P3KSBSuR5eOe",
+        "joined_date": "2024-09-21"
     }
 }

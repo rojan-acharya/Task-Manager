@@ -5,6 +5,7 @@ import bcrypt
 
 
 FILE_PATH = "data/users.json"
+CURRENT_USER = None
 
 class User:
     def __init__(self, username, password):
@@ -45,6 +46,8 @@ class User:
 
     def login_user(self):
         ''' User login function '''
+
+        global CURRENT_USER
         
         # checking if the file exists
         check_file_exists(FILE_PATH)
@@ -67,7 +70,14 @@ class User:
         stored_hash_pass = users[username]['password'].encode('utf-8')
         if bcrypt.checkpw(password.encode('utf-8'), stored_hash_pass):
             print(f"\nWelcome back, '{username.title()}'! Login successful :)\n")
+            CURRENT_USER = username
             return True
         else:
             print("\nInvalid password. Please try again :(")
             return False
+        
+    
+    @staticmethod
+    def get_current_user():
+        ''' Returns the currently logged-in user '''
+        return CURRENT_USER

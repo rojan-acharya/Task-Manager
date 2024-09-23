@@ -1,0 +1,41 @@
+{
+    "mijas": [
+        {
+            "name": "go shopping",
+            "description": "sakjdjs fdjvbfdjvs dcdsvfvhef vds",
+            "due_date": "2040/12/02",
+            "priority": "low",
+            "completed": false
+        },
+        {
+            "name": "go to smoke",
+            "description": "smoking marijuna by sitting in the lake side",
+            "due_date": "2024/10/29",
+            "priority": "medium",
+            "completed": false
+        }
+    ],
+    "rojan": [
+        {
+            "name": "going gym",
+            "description": "go to gym for the shoulder recovery.",
+            "due_date": "2025/04/03",
+            "priority": "high",
+            "completed": false
+        },
+        {
+            "name": "learn pytho",
+            "description": "need to learn some ml algos",
+            "due_date": "2026/04/03",
+            "priority": "high",
+            "completed": true
+        },
+        {
+            "name": "adaskmfdjknv",
+            "description": "kfndjvfdnv dkjfnfdjvnerf",
+            "due_date": "2030/01/01",
+            "priority": "low",
+            "completed": false
+        }
+    ]
+}

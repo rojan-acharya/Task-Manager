@@ -1,6 +1,7 @@
 import os
 import json
 import re
+from datetime import datetime
 
 
 def check_file_exists(FILE_PATH):
@@ -38,3 +39,48 @@ def get_password():
             return password 
     
 
+def get_task():
+    '''Get and validate the task name from the user'''
+    while True:
+        task = input("\nEnter task name: ").strip().lower()
+        if len(task) <= 2:
+            print("\nTask name should have at least 3 character!")
+        elif not all(char.isalnum() or char.isspace() for char in task):
+            print("\nTask name should only contain letters, numbers, and spaces!\n")
+        else:
+            return task
+        
+
+def get_description():
+    '''Get and validate the task description from the user'''
+    while True:
+        description = input("\nEnter task description: ").strip().lower()
+        if len(description) < 20:
+            print("\nTask name should have at least 20 character!")
+        else:
+            return description
+
+
+def get_due_date():
+    '''Get and validate the task due date from the user'''
+    while True:
+        due_date = input("\nEnter task due date in format (YYYY/MM/DD): ").strip()
+        try:
+            valid_date = datetime.strptime(due_date, "%Y/%m/%d")
+            if valid_date >= datetime.now():
+                return valid_date.strftime("%Y/%m/%d")
+            else:
+                print("\nPlease enter upcoming date!")
+        except ValueError:
+            print("\nInvalid date format! Please enter the date in YYYY/MM/DD format.")
+
+
+PRIORITY = ['low', 'medium', 'high']
+def get_priority():
+    '''Get and validate the task priority from the user'''
+    while True:
+        priority = input(f"\nEnter task priority ({', '.join(PRIORITY)}): ").strip().lower()
+        if priority not in PRIORITY:
+            print(f"\nInvalid priority! Please choose from: ({', '.join(PRIORITY)})")
+        else:
+            return priority
