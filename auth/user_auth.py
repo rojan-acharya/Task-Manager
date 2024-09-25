@@ -1,83 +1,68 @@
-from utils import check_file_exists
+from utils import load_data, USER_FILE_PATH, save_data
 from datetime import datetime
-import json
 import bcrypt
 
 
-FILE_PATH = "data/users.json"
 CURRENT_USER = None
+LOGGED_IN = False
 
 class User:
     def __init__(self, username, password):
         self.username = username
         self.password = password
-        self.join_date = datetime.now().strftime('%Y-%m-%d')
+        self.join_date = datetime.now().strftime("%Y-%m-%d")
 
 
     def register_user(self):
-        ''' User registeration function '''
-        
-        # checking if the file exists
-        check_file_exists(FILE_PATH)
+        """User register function"""
 
-        # checking if the user already exists in the data
-        with open(FILE_PATH, 'r') as f:
-            try:
-                users = json.load(f)
-            except json.JSONDecodeError:
-                users = {}
+        # loading pervious data
+        users = load_data(USER_FILE_PATH)
+
+        # checking if the user alredy exists
         if self.username in users:
-            print(f"\nUser '{self.username.title()}', already exists :(")
+            print(f"\nInfo: User with username '{self.username.title()}' already exists :(")
             return
         
-        # hashing the password before saving
-        hashed_password = bcrypt.hashpw(self.password.encode('utf-8'), bcrypt.gensalt())
+        # hashing password
+        hashed_pass = bcrypt.hashpw(self.password.encode('utf-8'), bcrypt.gensalt())
         
-        # saving new user in the data
+        # saving user
         users[self.username] = {
             'username': self.username,
-            'password': hashed_password.decode('utf-8'),
+            'password': hashed_pass.decode('utf-8'),
             'joined_date': self.join_date
         }
-        with open(FILE_PATH, 'w') as f:
-            json.dump(users, f, indent=4)
-        print(f"\nUser '{self.username.title()}', registered successfull :)")
+        save_data(USER_FILE_PATH, users)
+        print(f"\nSuccess: User '{self.username.title()}' registered successfully :)")
 
 
     def login_user(self):
-        ''' User login function '''
+        """User login function"""
 
-        global CURRENT_USER
-        
-        # checking if the file exists
-        check_file_exists(FILE_PATH)
+        global CURRENT_USER, LOGGED_IN
 
-        username = input('Enter username: ').strip().lower()
+        # loading pervious data
+        users = load_data(USER_FILE_PATH)
 
-        # checking if the user exists in the data
-        with open(FILE_PATH, 'r') as f:
-            try:
-                users = json.load(f)
-            except json.JSONDecodeError:
-                users = {}
-        if username not in users:
-            print(f"\nUser '{username.title()}', doenot exists :(")
-            return False
-        
-        password = input('Enter password: ').strip()
-        
-        # retrieving the user hashed password and verifying it with the original
-        stored_hash_pass = users[username]['password'].encode('utf-8')
-        if bcrypt.checkpw(password.encode('utf-8'), stored_hash_pass):
-            print(f"\nWelcome back, '{username.title()}'! Login successful :)\n")
-            CURRENT_USER = username
+        password = users[self.username]['password'].encode('utf-8')
+
+        if bcrypt.checkpw(self.password.encode('utf-8'), password):
+            print(f"\nSuccess: Welcome back, '{self.username.title()}'! Login successful :)")
+            CURRENT_USER = self.username
+            LOGGED_IN = True
             return True
         else:
-            print("\nInvalid password. Please try again :(")
+            print("\nError: Invalid password. Please try again :(")
             return False
         
-    
+
     @staticmethod
     def get_current_user():
-        ''' Returns the currently logged-in user '''
+        """Tracks currently logged in user"""
+
         return CURRENT_USER
+            
+    
+
+        

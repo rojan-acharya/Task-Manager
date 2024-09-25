@@ -1,17 +1,12 @@
 {
+    "manjil": {
+        "username": "manjil",
+        "password": "$2b$12$cfizq4U05R0ap59NO7hYIeeQLrmt4jR8dZAMlKid1M9Op4iwc.e9.",
+        "joined_date": "2024-09-24"
+    },
     "rojan": {
         "username": "rojan",
-        "password": "$2b$12$xKsbZ0csEKSe/FJB/O72qu4rdm7RDVFfZuxShfR/CRzPN1ktqDUAi",
-        "joined_date": "2024-09-20"
-    },
-    "manami": {
-        "username": "manami",
-        "password": "$2b$12$cyZ8VVl911QAb.fTJPkicOXcqnAlz69qK8cSljfhtFk9AWnj2CJ5u",
-        "joined_date": "2024-09-20"
-    },
-    "mijas": {
-        "username": "mijas",
-        "password": "$2b$12$yXejtvgQpdsieU8ISinMKOP2qkAzLlRCpxbe2FZJ.P3KSBSuR5eOe",
-        "joined_date": "2024-09-21"
+        "password": "$2b$12$0jNxMhbKTVwM2Jio5IF0ae/OKtHFaK9AQAupw9yrxKKnk.qm9yYc.",
+        "joined_date": "2024-09-24"
     }
 }

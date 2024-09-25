@@ -1,93 +1,115 @@
-from auth.user_auth import User
+import auth.user_auth as auth
 from task.manager import TaskManager
-from utils import get_username, get_password, get_task, get_description, get_due_date, get_priority
+import utils
 
 
-MAIN_OPTIONS = ['login', 'register', 'exit']
-TASK_OPTIONS = ['add task', 'view task', 'update task', 'mark complete', 'remove task', 'logout']
+def menu():
+    """Display user menu"""
 
-def menu(options,):
-    ''' Displaying menu to the user '''
-
-    for idx, option in enumerate(options, 1):
-        print(f"{idx}. {option.title()}")
+    if not auth.LOGGED_IN:
+        print(f"\n*{'-'*8} Welcome to ABC Task Manager {'-'*8}*\n")
+        utils.display_option(utils.AUTH_OPTIONS)
+    else:
+        print(f"\n*{'-'*8} Task Manager - Logged in as {auth.CURRENT_USER.title()} {'-'*8}*\n")
+        utils.display_option(utils.TASK_OPTIONS)
 
 
 def main():
-    ''' Main/Entry function of the program '''
-
-    logged_in = False
+    """Entry/main function of the program"""
 
     while True:
-        if not logged_in:
-            print(f"\n{'-'*7} Welcome to ABC's Todo App {'-'*7}\n")
-            menu(MAIN_OPTIONS)
+        menu()
+        if not auth.LOGGED_IN:
+            option_number = utils.get_option_number(utils.AUTH_OPTIONS)
+            
+            if option_number is not None:
+                # checks if the file exists, if not creates one
+                utils.check_file_exists(utils.USER_FILE_PATH)
+
+                # loading pervious data
+                users = utils.load_data(utils.USER_FILE_PATH)
+
+                if option_number == 0:  
+                    while True:
+                        username = input("\nEnter username: ").strip().lower()
+                        if username not in users:
+                            print(f"Info: User with username '{username.title()}' doesnot exists :(")
+                        else:
+                            password = input("\nEnter password: ").strip()
+                            login = auth.User(username, password)
+                            login.login_user()
+                            break
+                
+                elif option_number == 1:
+                    username = input("\nEnter username: ").strip().lower()
+                    while not utils.validate_username(username):
+                        username = input("\nEnter username: ").strip().lower()
+                    password = input("\nEnter password: ").strip()
+                    while not utils.validate_password(password):
+                        password = input("\nEnter password: ").strip()
+
+                    register = auth.User(username, password)
+                    register.register_user()
+
+                elif option_number == 2:
+                    print("\nThank you! Visit Again :)\n")
+                    break
         else:
-            menu(TASK_OPTIONS)
-        try:
-            user_input = int(input("\nEnter an option number: ")) - 1
-            if not logged_in:
-                if user_input >= 0 and user_input <= len(MAIN_OPTIONS)-1:
-                    if user_input == len(MAIN_OPTIONS)-1:
-                        print("\nThank You! Visit Again :)\n")
-                        break
+            option_number = utils.get_option_number(utils.TASK_OPTIONS)
+            if option_number is not None:
+                # checks if the file exists, if not creates one
+                utils.check_file_exists(utils.TASK_FILE_PATH)
 
-                    elif user_input == 0:
-                        print("\nUser Login:\n")
-                        login = User('', '')
-                        logged_in = login.login_user()
+                if option_number == 0:
+                    print('\nAdding task:')
 
-                    elif user_input == 1:
-                        print("\nUser Registeration:\n")
-                        username = get_username()
-                        password = get_password()
-                        register = User(username, password)
-                        register.register_user()
-                else:
-                    print("\nOption out of range! Try Again :(")
-            else:
-                if user_input >= 0 and user_input <= len(TASK_OPTIONS)-1:
-                    if user_input == len(TASK_OPTIONS) - 1:
-                        logged_in = False
-                        print("\nLogout successfull :)")
-                    
-                    elif user_input == 0:
-                        print('\nAdding task:')
-                        task_name = get_task()
-                        description = get_description()
-                        due_date = get_due_date()
-                        priority = get_priority()
+                    task_name = input("\nEnter task name: ").strip().lower()
+                    while not utils.validate_task_name(task_name):
+                        task_name = input("\nEnter task name: ").strip().lower()
 
-                        add = TaskManager(task_name, description, due_date, priority)
-                        add.add_task()
+                    description = input("\nEnter task description: ").strip().lower()
+                    while not utils.validate_task_description(description):
+                        description = input("\nEnter description: ").strip().lower()
 
-                    elif user_input == 1:
-                        print('\nViewing task:')
-                        view = TaskManager('', '', '', '')
-                        view.view_task()
+                    due_date = input("\nEnter due date: ").strip()
+                    while not utils.validate_due_date(due_date):
+                        due_date = input("\nEnter due date: ").strip()
 
-                    elif user_input == 2:
-                        print('\nUpdating task:\n')
-                        update = TaskManager('', '', '', '')
-                        update.update_task()
-                    
-                    elif user_input == 3:
-                        print('\nMarking task:\n')
-                        mark = TaskManager('', '', '', '')
-                        mark.mark_complete()
+                    priority = input("\nEnter task priority (high, medium, low): ").strip().lower()
+                    priority = utils.validate_priority(priority)
 
-                    elif user_input == 5:
-                        print('\nRemoving task:\n')
-                        remove = TaskManager('', '', '', '')
-                        remove.remove_task()
-                else:
-                    print("\nOption out of range! Try Again :(\n")
-                    
-        except ValueError:
-            print("\nPlease enter numeric option number :(")
-        except IndexError:
-            print("\nOption out of range! Try Again :(")
-    
+                    add = TaskManager(task_name, description, due_date, priority)
+                    add.add_task()
+
+
+                elif option_number == 1:
+                    print("\nViewing task:")
+
+                    view = TaskManager('','','','')
+                    view.view_task()
+
+
+                elif option_number == 2:
+                    print("\nUpdating task:")
+
+
+                elif option_number == 3:
+                    print("\nMarking task:")
+
+                    mark = TaskManager('','','','')
+                    mark.mark_complete()
+
+                
+                elif option_number == 4:
+                    print("\nRemoving task:")
+
+                    remove = TaskManager('','','','')
+                    remove.remove_task()
+                
+                elif option_number == 5:
+                    auth.LOGGED_IN = False
+                    print("\nLogout successful :)")
+
 
 if __name__ == "__main__":
     main()

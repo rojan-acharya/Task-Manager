@@ -1,9 +1,6 @@
-from utils import check_file_exists
-from auth.user_auth import User
-import json
+import auth.user_auth as auth
+from utils import load_data, TASK_FILE_PATH, save_data, display_tasks
 
-
-FILE_PATH = "data/tasks.json"
 
 class Task:
     def __init__(self, name, description, due_date, priority):
@@ -12,99 +9,125 @@ class Task:
         self.due_date = due_date
         self.priority = priority
 
-
+    
 class TaskManager(Task):
     def add_task(self):
-        ''' Adding the user tasks '''
+        """Function defined to add todo"""
 
-        # checking if the file exists
-        check_file_exists(FILE_PATH)
+        # loading existing data
+        tasks = load_data(TASK_FILE_PATH)
 
-        # loading pervious tasks
-        with open(FILE_PATH, 'r') as f:
-            try:
-                tasks = json.load(f)
-            except json.JSONDecodeError:
-                tasks = {}
-        
-        # getting current user and creating an entry point for the user
-        current_user = User.get_current_user()
+        # getting current user
+        current_user = auth.User.get_current_user()
+
         if current_user not in tasks:
             tasks[current_user] = []
-        
-        # adding data
-        task_data = {
+
+        data = {
             'name': self.name,
             'description': self.description,
             'due_date': self.due_date,
             'priority': self.priority,
             'completed': False
         }
-        tasks[current_user].append(task_data)
+        tasks[current_user].append(data)
 
         # saving data
-        with open(FILE_PATH, 'w') as f:
-            json.dump(tasks, f, indent=4)
-        
-        print(f"\nTask '{self.name.title()}' added successfully :)")
+        save_data(TASK_FILE_PATH, tasks)
+        print(f"\nSuccess: Task '{self.name.title()}' added successfully :)")
 
 
     def view_task(self):
-        ''' Viewing the user tasks '''
+        """Function defined to view task"""
 
-        # checking if the file exists
-        check_file_exists(FILE_PATH)
-
-        # loading all tasks
-        with open(FILE_PATH, 'r') as f:
-            try:
-                tasks = json.load(f)
-            except json.JSONDecodeError:
-                tasks = {}
+        # loading existing data
+        tasks = load_data(TASK_FILE_PATH)
 
         # getting current user
-        current_user = User.get_current_user()
+        current_user = auth.User.get_current_user()
 
-        # getting the tasks for current user
+        # checking if the task exist for the user
         if current_user not in tasks or not tasks[current_user]:
             print("Your TODO list is empty!\n")
             return
+        
+        # seprating completed and pending task
         pending_tasks = [task for task in tasks[current_user] if not task['completed']]
         completed_tasks = [task for task in tasks[current_user] if task['completed']]
         
-        # Function to display tasks
-        def display_tasks(task_list, status):
-            if task_list:
-                print(f"\n{status.capitalize()} Tasks for {current_user.capitalize()}:\n")
-                for index, task in enumerate(task_list, start=1):
-                    print(f"Task {index}:")
-                    print(f"  Name        : {task['name']}")
-                    print(f"  Description : {task['description']}")
-                    print(f"  Due Date    : {task['due_date']}")
-                    print(f"  Priority    : {task['priority'].capitalize()}")
-                    print("-" * 40)
-            else:
-                print(f"No {status.lower()} tasks!\n")
-
         # Display pending and completed tasks
-        display_tasks(pending_tasks, "pending")
-        display_tasks(completed_tasks, "completed")
-        print('\nViewed all the task.\n')
-        
-
-    def update_task(self):
-        ''' Updating the user tasks '''
-
-        print("updatingggg tasksksks")
+        display_tasks(pending_tasks, "pending", current_user)
+        display_tasks(completed_tasks, "completed", current_user)
+        print('\nViewed all the task.')
 
 
     def mark_complete(self):
-        ''' Marking the user tasks completed '''
+        """Function defined to mark complete to pending task"""
 
-        print("completingggg tasksksks")
+        # loading existing data
+        tasks = load_data(TASK_FILE_PATH)
+
+        # getting current user
+        current_user = auth.User.get_current_user()
+
+        # checking if the task exist for the user
+        if current_user not in tasks or not tasks[current_user]:
+            print("Your TODO list is empty!\n")
+            return
+        
+        pending_tasks = [task for task in tasks[current_user] if not task['completed']]
+
+        if pending_tasks:
+            display_tasks(pending_tasks, "pending", current_user)
+            
+            try:
+                task_number = int(input("Enter task number to mark complete: "))-1
+                if 0 <= task_number < len(pending_tasks):
+                    pending_tasks[task_number]['completed'] = True
+                    # saving data
+                    save_data(TASK_FILE_PATH, tasks)
+                    print("\nSuccess: Task marked done successfully :)")
+                else:
+                    print("\nError: Task number out of range! Try again :(")
+            except ValueError:
+                print("\nError: Please enter numeric value :(")
+        else:
+            print("Info: You donot have any pending task!")
 
 
     def remove_task(self):
-        ''' Removing the user tasks '''
+        """Function defined to remove task, only completed task can be removed"""
 
-        print("removiiingg tasksksks")
+        # loading existing data
+        tasks = load_data(TASK_FILE_PATH)
+
+        # getting current user
+        current_user = auth.User.get_current_user()
+
+        # checking if the task exist for the user
+        if current_user not in tasks or not tasks[current_user]:
+            print("Your TODO list is empty!\n")
+            return
+        
+        completed_tasks = [task for task in tasks[current_user] if task['completed']]
+        if completed_tasks:
+            display_tasks(completed_tasks, "completed", current_user)
+            try:
+                task_number = int(input("Enter task number to remove: "))-1
+                if 0 <= task_number < len(completed_tasks):
+                    tasks[current_user].pop(task_number)
+                    # saving data
+                    save_data(TASK_FILE_PATH, tasks)
+                    print("\nSuccess: Task removed successfully :)")
+                else:
+                    print("\nError: Task number out of range! Try again :(")
+            except ValueError:
+                print("\nError: Please enter numeric value :(")
+        else:
+            print("Info: You donot have any completed task!")
+
+
+    def update_task(self):
+        """Function defined to update task"""
+
+        pass
