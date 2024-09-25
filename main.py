@@ -60,6 +60,12 @@ def main():
                 # checks if the file exists, if not creates one
                 utils.check_file_exists(utils.TASK_FILE_PATH)
 
+                # loading existing data
+                tasks = utils.load_data(utils.TASK_FILE_PATH)
+
+                # getting current user
+                current_user = auth.CURRENT_USER
+
                 if option_number == 0:
                     print('\nAdding task:')
 
@@ -67,19 +73,22 @@ def main():
                     while not utils.validate_task_name(task_name):
                         task_name = input("\nEnter task name: ").strip().lower()
 
-                    description = input("\nEnter task description: ").strip().lower()
-                    while not utils.validate_task_description(description):
-                        description = input("\nEnter description: ").strip().lower()
+                    if len(task_name) <= 3:
+                        print("\nError: Task name cannot be empty :(")
+                    else:
+                        description = input("\nEnter task description: ").strip().lower()
+                        while not utils.validate_task_description(description):
+                            description = input("\nEnter description: ").strip().lower()
 
-                    due_date = input("\nEnter due date: ").strip()
-                    while not utils.validate_due_date(due_date):
                         due_date = input("\nEnter due date: ").strip()
+                        while not utils.validate_due_date(due_date):
+                            due_date = input("\nEnter due date: ").strip()
 
-                    priority = input("\nEnter task priority (high, medium, low): ").strip().lower()
-                    priority = utils.validate_priority(priority)
+                        priority = input("\nEnter task priority (high, medium, low): ").strip().lower()
+                        priority = utils.validate_priority(priority)
 
-                    add = TaskManager(task_name, description, due_date, priority)
-                    add.add_task()
+                        add = TaskManager(task_name, description, due_date, priority)
+                        add.add_task()
 
 
                 elif option_number == 1:
@@ -88,9 +97,11 @@ def main():
                     view = TaskManager('','','','')
                     view.view_task()
 
-
                 elif option_number == 2:
                     print("\nUpdating task:")
+                    print("Note: Leave blank if you donot want to update any field!")
+                    update = TaskManager('','','','')
+                    update.update_task()
 
 
                 elif option_number == 3:

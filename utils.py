@@ -44,10 +44,10 @@ def load_data(file_path):
 
 
 def validate_username(username):
-    if not username.strip():
-        print("Error: Username name cannot be empty or spaces :(")
+    if len(username) == 0:
+        print("Error: Username cannot be empty :(")
         return None
-    elif len(username) <= 2:
+    if len(username) <= 2:
         print("Error: Username must have at least 3 characters :(")
         return None
     elif not re.search(r'[a-z]', username):
@@ -80,18 +80,14 @@ def save_data(file_path, data):
         json.dump(data, f, indent=4)
     
 
-def validate_task_name(name):
-    if not name.strip():
-        print("Error: Task name cannot be empty or spaces :(")
-        return None
+def validate_task_name(name, allow_empty=False):
+    if allow_empty and len(name) == 0:
+        return name
     if len(name) < 3:
-        print("Error: Task name should have atleast 3 characters :(")
+        print("Error: Task name should have at least 3 characters :(")
         return None
     if len(name) > 20:
         print("Error: Task name should not exceed 20 characters :(")
-        return None
-    if not re.match("^[a-zA-Z0-9 _-]+$", name):
-        print("Error: Task name can only contain letters, numbers, spaces, hyphens, and underscores :(")
         return None
     else:
         return name

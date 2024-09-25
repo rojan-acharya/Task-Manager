@@ -8,5 +8,10 @@
         "username": "rojan",
         "password": "$2b$12$0jNxMhbKTVwM2Jio5IF0ae/OKtHFaK9AQAupw9yrxKKnk.qm9yYc.",
         "joined_date": "2024-09-24"
+    },
+    "manami": {
+        "username": "manami",
+        "password": "$2b$12$eTuaYE2HpihiScp2JYnJYer58CHDEzFMCbMlxJ4Be5oGA7AJv.uAW",
+        "joined_date": "2024-09-25"
     }
 }
